@@ -1,0 +1,33 @@
+title: Ransomware Precursor — Mass File Rename with New Extension
+id: 7c3e91f2-8a44-4d0e-b6a1-93f0c2d7e511
+status: stable
+description: >
+  Detects the mass file-rename burst characteristic of ransomware encryption
+  routines (LockBit, Akira, BlackCat families). Volume threshold suppresses
+  single-file user renames.
+references:
+  - https://attack.mitre.org/techniques/T1486/
+author: h47er (detection engineering lab)
+date: 2026/09/15
+tags:
+  - attack.t1486
+  - attack.impact
+  - attack.ta0040
+logsource:
+  category: file_event
+  product: windows
+detection:
+  selection:
+    EventID: 4663
+    ObjectType: 'File'
+  volume_filter:
+    RenameCount|gte: 500
+    TimeWindow: '60s'
+  extension_change:
+    Details|contains|all:
+      - '.locked'
+      - '.encrypted'
+  condition: selection and volume_filter and extension_change
+falsepositives:
+  - Bulk document migrations (rare at 500+ renames/min with double-extension pattern)
+level: critical

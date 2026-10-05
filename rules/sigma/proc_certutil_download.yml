@@ -1,0 +1,29 @@
+title: Living-off-the-Land — certutil.exe Remote Download
+id: 1e9c3b57-4a02-4d86-b7f1-8c5d0e6a93b2
+status: stable
+description: >
+  Detects certutil.exe used with urlcache/-URLCache functions to fetch remote
+  payloads — a hallmark LOLBin tradecraft that evades application allowlisting.
+references:
+  - https://attack.mitre.org/techniques/T1105/
+author: h47er (detection engineering lab)
+date: 2026/09/15
+tags:
+  - attack.t1105
+  - attack.command_and_control
+  - attack.defense_evasion
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_img:
+    Image|endswith: '\certutil.exe'
+  selection_cmd:
+    CommandLine|contains:
+      - 'urlcache'
+      - '-split -f'
+      - 'verifyctl'
+  condition: selection_img and selection_cmd
+falsepositives:
+  - Rare; approved admin download scripts (allowlist by parent process + target host)
+level: high

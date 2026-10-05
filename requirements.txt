@@ -1,0 +1,7 @@
+# Agentic SOC & CTEM Lab
+# Core runtime uses only the Python standard library by design —
+# zero dependencies for the reference implementation.
+#
+# Optional dashboard dependencies:
+# streamlit>=1.36
+# plotly>=5.22

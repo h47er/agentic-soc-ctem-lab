@@ -1,0 +1,111 @@
+{
+  "cycle_at": "2026-10-05T13:45:15Z",
+  "risk_appetite": 55,
+  "stages": {
+    "scope": {
+      "in_scope_assets": 4,
+      "top_assets": [
+        "DC-CORE01",
+        "FIN-ERP01",
+        "VPN-GW01",
+        "SRV-FILE01"
+      ]
+    },
+    "discover": {
+      "total_findings": 6,
+      "assets_with_findings": 5
+    },
+    "prioritize": {
+      "mean_risk": 60.6,
+      "above_appetite": 3,
+      "top_exposures": [
+        {
+          "finding": "CVE-2024-21762 VPN RCE",
+          "asset": "VPN-GW01",
+          "risk": 100.0,
+          "kev": true,
+          "attack_path": "internet-exposed entry point -> public exploit path -> direct path to crown-jewel data"
+        },
+        {
+          "finding": "VPN without MFA for legacy group",
+          "asset": "VPN-GW01",
+          "risk": 71.7,
+          "kev": false,
+          "attack_path": "internet-exposed entry point -> public exploit path -> direct path to crown-jewel data"
+        },
+        {
+          "finding": "SMBv1 enabled on domain controller",
+          "asset": "DC-CORE01",
+          "risk": 69.1,
+          "kev": false,
+          "attack_path": "public exploit path -> direct path to crown-jewel data"
+        },
+        {
+          "finding": "ERP suite 14 months behind patch level",
+          "asset": "FIN-ERP01",
+          "risk": 53.8,
+          "kev": false,
+          "attack_path": "direct path to crown-jewel data"
+        },
+        {
+          "finding": "Local privilege escalation CVE",
+          "asset": "WS-1042",
+          "risk": 37.8,
+          "kev": false,
+          "attack_path": "no obvious path"
+        },
+        {
+          "finding": "TLS certificate expired 12 days ago",
+          "asset": "SRV-FILE01",
+          "risk": 31.4,
+          "kev": false,
+          "attack_path": "no obvious path"
+        }
+      ]
+    },
+    "validate": {
+      "validated_exploitable": 3
+    },
+    "mobilize": {
+      "tasks_created": 3,
+      "p1": 1
+    }
+  },
+  "tasks": [
+    {
+      "task_id": "EXP-0000",
+      "finding_id": "F1",
+      "asset_id": "A3",
+      "action": "Patch: CVE-2024-21762 VPN RCE",
+      "owner_team": "Infra + App Owner (joint)",
+      "priority": "P1",
+      "due_days": 2,
+      "rationale": "risk 100.0 | internet-exposed entry point -> public exploit path -> direct path to crown-jewel data | KEV-exploited"
+    },
+    {
+      "task_id": "EXP-0001",
+      "finding_id": "F4",
+      "asset_id": "A3",
+      "action": "Contain identity risk: VPN without MFA for legacy group",
+      "owner_team": "IAM Team",
+      "priority": "P2",
+      "due_days": 7,
+      "rationale": "risk 71.7 | internet-exposed entry point -> public exploit path -> direct path to crown-jewel data | per policy"
+    },
+    {
+      "task_id": "EXP-0002",
+      "finding_id": "F2",
+      "asset_id": "A1",
+      "action": "Remediate config: SMBv1 enabled on domain controller",
+      "owner_team": "Infra + App Owner (joint)",
+      "priority": "P3",
+      "due_days": 30,
+      "rationale": "risk 69.1 | public exploit path -> direct path to crown-jewel data | per policy"
+    }
+  ],
+  "kpis": {
+    "exposure_rate": 50.0,
+    "kev_unpatched": 1,
+    "validated_exposure_rate": 50.0
+  }
+}

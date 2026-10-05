@@ -1,0 +1,30 @@
+title: MFA Fatigue — Push Bombing Storm
+id: 9d41b6c8-2e77-4f5a-8c93-6b0f4a1d2e77
+status: stable
+description: >
+  Detects abnormal volumes of MFA push requests to a single identity within a short
+  window — the MFA-fatigue technique used to social-engineer approval (Lapsus$ pattern).
+references:
+  - https://attack.mitre.org/techniques/T1621/
+author: h47er (detection engineering lab)
+date: 2026/09/15
+tags:
+  - attack.t1621
+  - attack.credential_access
+  - attack.ta0006
+logsource:
+  product: azure
+  service: signinlogs
+detection:
+  selection:
+    Category: 'UserAuthentication'
+    AuthenticationRequirement: 'multiFactorAuthentication'
+    ResultType: 0
+  volume_filter:
+    PushCount|gte: 8
+    TimeWindow: '10m'
+    DistinctLocations|lt: 2
+  condition: selection and volume_filter
+falsepositives:
+  - User retrying after connectivity problems (correlate with helpdesk tickets)
+level: high

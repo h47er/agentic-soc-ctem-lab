@@ -1,0 +1,133 @@
+{
+  "rules_loaded": 5,
+  "rules_with_attack_mapping": 5,
+  "coverage": {
+    "priority_techniques_total": 28,
+    "covered": 5,
+    "gaps": 23,
+    "coverage_pct": 17.9
+  },
+  "telemetry_alignment": {
+    "techniques_in_telemetry": 14,
+    "detected": [
+      "T1003.001",
+      "T1071.001",
+      "T1105",
+      "T1486",
+      "T1621"
+    ],
+    "undetected_in_telemetry": [
+      "T1053.005",
+      "T1059.001",
+      "T1078",
+      "T1110.003",
+      "T1204.002",
+      "T1566.001",
+      "T1566.003"
+    ],
+    "detection_rate_on_telemetry": 35.7
+  },
+  "by_tactic": {
+    "Discovery": {
+      "covered": [],
+      "gaps": [
+        "T1087",
+        "T1046"
+      ]
+    },
+    "Initial Access": {
+      "covered": [],
+      "gaps": [
+        "T1566.001",
+        "T1566.002",
+        "T1566.003",
+        "T1190",
+        "T1078"
+      ]
+    },
+    "Defense Evasion": {
+      "covered": [],
+      "gaps": [
+        "T1070.004"
+      ]
+    },
+    "Credential Access": {
+      "covered": [
+        "T1621",
+        "T1003.001"
+      ],
+      "gaps": [
+        "T1003.003",
+        "T1110.003"
+      ]
+    },
+    "Command and Control": {
+      "covered": [
+        "T1071.001",
+        "T1105"
+      ],
+      "gaps": [
+        "T1071.004"
+      ]
+    },
+    "Lateral Movement": {
+      "covered": [],
+      "gaps": [
+        "T1021.002",
+        "T1021.001"
+      ]
+    },
+    "Collection": {
+      "covered": [],
+      "gaps": [
+        "T1530",
+        "T1560.001"
+      ]
+    },
+    "Execution": {
+      "covered": [],
+      "gaps": [
+        "T1059.001",
+        "T1053.005",
+        "T1059.003",
+        "T1204.002"
+      ]
+    },
+    "Privilege Escalation": {
+      "covered": [],
+      "gaps": [
+        "T1548.002",
+        "T1055"
+      ]
+    },
+    "Exfiltration": {
+      "covered": [],
+      "gaps": [
+        "T1041"
+      ]
+    },
+    "Other": {
+      "covered": [],
+      "gaps": [
+        "T1547.001"
+      ]
+    },
+    "Impact": {
+      "covered": [
+        "T1486"
+      ],
+      "gaps": []
+    }
+  },
+  "gap_recommendations": [
+    "\ud83d\udd34 URGENT \u2014 technique T1053.005 appears in our own attack telemetry but has no detection rule. Write a Sigma rule first (real-world exposure).",
+    "\ud83d\udd34 URGENT \u2014 technique T1059.001 appears in our own attack telemetry but has no detection rule. Write a Sigma rule first (real-world exposure).",
+    "\ud83d\udd34 URGENT \u2014 technique T1078 appears in our own attack telemetry but has no detection rule. Write a Sigma rule first (real-world exposure).",
+    "\ud83d\udd34 URGENT \u2014 technique T1110.003 appears in our own attack telemetry but has no detection rule. Write a Sigma rule first (real-world exposure).",
+    "\ud83d\udd34 URGENT \u2014 technique T1204.002 appears in our own attack telemetry but has no detection rule. Write a Sigma rule first (real-world exposure).",
+    "\ud83d\udd34 URGENT \u2014 technique T1566.001 appears in our own attack telemetry but has no detection rule. Write a Sigma rule first (real-world exposure).",
+    "\ud83d\udd34 URGENT \u2014 technique T1566.003 appears in our own attack telemetry but has no detection rule. Write a Sigma rule first (real-world exposure).",
+    "\ud83d\udfe0 High \u2014 no NTDS.dit dumping detection. Critical for domain compromise.",
+    "\ud83d\udfe1 16 additional priority gaps without observed telemetry \u2014 schedule into detection engineering backlog by kill-chain stage."
+  ]
+}

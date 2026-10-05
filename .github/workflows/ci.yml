@@ -1,0 +1,49 @@
+name: SOC Lab CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run unit & integration tests
+        run: python tests/test_pipeline.py
+
+      - name: Generate telemetry + run full pipeline (smoke)
+        run: |
+          python src/telemetry/generator.py --hours 24 --attack-ratio 0.05 --output data/alerts.jsonl
+          python src/agents/pipeline.py --input data/alerts.jsonl --output reports/triage.jsonl
+          python src/detection/coverage.py --rules rules/sigma --report reports/coverage.json
+          python src/ctem/engine.py --output reports/ctem-report.json
+
+      - name: Detection coverage regression gate
+        run: |
+          COV=$(python -c "import json;print(json.load(open('reports/coverage.json'))['coverage']['coverage_pct'])")
+          echo "Current ATT&CK priority coverage: $COV%"
+          BASE=$(cat .coverage-baseline 2>/dev/null || echo 0)
+          if python -c "exit(0 if float('$COV') >= float('$BASE') else 1)"; then
+            echo "✅ Coverage $COV% >= baseline $BASE%"
+          else
+            echo "❌ Coverage regressed: $COV% < baseline $BASE%. Add rules or update baseline deliberately."
+            exit 1
+          fi
+
+      - name: Upload reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: soc-lab-reports
+          path: reports/
+
+      - name: Safety check — no offensive tooling in repo
+        run: |
+          ! grep -riEl "nmap |sqlmap|hydra |metasploit|msfvenom|empire |covenant " src/ rules/ --include="*.py" --include="*.yml"

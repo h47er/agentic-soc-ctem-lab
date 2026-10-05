@@ -1,0 +1,30 @@
+title: LSASS Memory Access via comsvcs.dll (MiniDump)
+id: 5a2f438a-b5a6-4b1c-9f3e-2f7c8d1e4a90
+status: stable
+description: >
+  Detects rundll32 loading comsvcs.dll with MiniDump — the classic technique for
+  dumping LSASS memory to harvest credentials (Cobalt Strike beacon, QakBot, manuel).
+references:
+  - https://attack.mitre.org/techniques/T1003/001/
+author: h47er (detection engineering lab)
+date: 2026/09/15
+tags:
+  - attack.t1003.001
+  - attack.credential_access
+  - attack.ta0006
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_img:
+    Image|endswith: '\rundll32.exe'
+  selection_dll:
+    CommandLine|contains: 'comsvcs.dll'
+  selection_call:
+    CommandLine|contains:
+      - 'MiniDump'
+      - '#24'
+  condition: selection_img and selection_dll and selection_call
+falsepositives:
+  - Legitimate admin memory-dump tooling during approved forensics (document in allowlist)
+level: critical
